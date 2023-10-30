@@ -29,10 +29,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: my-artifacts #This is the name defined to artifacts identifier.
-          path: my-artifacts-upload.txt
+          path: my-artifacts-upload
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+      - name: Lost downloaded files.
+        run: ls
       - name: Deploy
         run: echo "Deploying..."
