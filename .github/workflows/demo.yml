@@ -18,6 +18,9 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    outputs:
+      # <Script File Identifier>: {{ steps.<stepid>.outputs.<step-var>}}
+      script-file-job-var: ${{ steps.step-id.outputs.script-file-step-var }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -25,6 +28,11 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
+      - name: Publish JS Filename
+        # Define ID to the step that will be utilized to access variable generated in this step.
+        id: step-id
+        # Copy step command output filename value into step level variable - script-file-step-var
+        run: find dist/assets/*.js -type f -execdir echo 'script-file-step-var={}' >> $GITHUB_OUTPUT ';' 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -40,5 +48,10 @@ jobs:
           name: my-artifacts
       - name: List downloaded files.
         run: ls
+      - name: Step to refer job variable of upstream job
+        # needs object is used to read output of job variable
+        # needs.<job name>.outputs.<job-var-identifier>
+        # Below line displays the output variable generated in build job.
+        run: echo "${{ needs.build.outputs.script-file-job-var}}"
       - name: Deploy
         run: echo "Deploying..."
