@@ -9,8 +9,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-        # Cache dependency check
-        - name: Cache Dependency
+      # Cache dependency check
+      - name: Cache Dependency
         uses: actions/cache@v3
         with:
           path: ~/.npm
