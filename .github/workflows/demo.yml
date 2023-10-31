@@ -36,6 +36,8 @@ jobs:
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v3
+        with:
+          name: my-artifacts
       - name: List downloaded files.
         run: ls
       - name: Deploy
